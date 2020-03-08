@@ -1,0 +1,17 @@
+lastupdate: Mar 08, 2020
+
+infections:
+        MainlandChina: 80 thousand
+        OutsideChina: 146 thousand
+        SouthKorea: 7 thousand
+        Italy: 13 thousand
+        US: 546.273 million
+        UK: 79.378 million
+
+peakdate:
+        MainlandChina: Feb 08, 2020
+        OutsideChina: Mar 14, 2020
+        SouthKorea: Mar 01, 2020
+        Italy: Mar 08, 2020
+        US: May 04, 2020
+        UK: Apr 18, 2020
