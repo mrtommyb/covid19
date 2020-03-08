@@ -2,3 +2,5 @@
 
 Setting up code to autorun and generate figures that show some predictions on how long this will go on.
 The site is viewale at https://mrtommyb.github.io/covid19
+
+This work was based on a notebook made by [JeroenKools](https://github.com/JeroenKools/covid19) and their [reddit post](https://www.reddit.com/r/dataisbeautiful/comments/ff9jn4/oc_number_of_cases_per_country_counting_from_the).
