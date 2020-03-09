@@ -1,6 +1,6 @@
 pandas
 numpy
-bokeh
+bokeh=1.4.0
 scipy
 requests
 exoplanet
