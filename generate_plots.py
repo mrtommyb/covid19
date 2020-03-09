@@ -286,7 +286,7 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
     label_opts = dict(
         x=dates[-1],
         y=5,
-        text_align="right",
+        text_align="left",
         text_font_size="9pt",
     )
 
