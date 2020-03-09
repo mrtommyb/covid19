@@ -367,4 +367,4 @@ if __name__ == "__main__":
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
-        create_yaml(d, mcmc=True)
+    create_yaml(d, mcmc=True)
