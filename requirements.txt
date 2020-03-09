@@ -3,3 +3,6 @@ numpy
 bokeh
 scipy
 requests
+exoplanet
+theano
+pymc3

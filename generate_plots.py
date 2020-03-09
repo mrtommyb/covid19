@@ -15,6 +15,10 @@ from bokeh.models import Legend, ColumnDataSource
 from bokeh.models import FuncTickFormatter, Label
 from scipy.optimize import curve_fit
 
+import pymc3 as pm
+import theano.tensor as tt
+from exoplanet import optimize
+
 
 theme = Theme(filename="./tomtheme.yaml")
 curdoc().theme = theme
@@ -140,7 +144,7 @@ def logistic_model(x, la, lb, lc):
     return c / (1 + np.exp(-(x - b) / a))
 
 
-def extrapolate_logistic(df, country="US", days_in_future=100, logy=False):
+def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
     dates = by_country.index
     y = df.loc[:, country].values
     x = (dates - np.datetime64(dates[0])).days
@@ -200,6 +204,9 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=False):
         f'{(dates[0] + datetime.timedelta(days=np.exp(x0[1]))).strftime("%b %d, %Y")}',
         np.exp(x0[2]),
     ]
+
+def run_mcmc(df, country='US', days_in_future=100, logy=True):
+    pass
 
 
 def create_yaml(d):

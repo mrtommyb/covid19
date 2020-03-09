@@ -6,7 +6,7 @@
 
 {% include US_infections_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that US infection rate will reach its **peak on {{site.data.data.peakdate.US}}** and a total of **{{site.data.data.infections.US}} people will be infected**.
+As of {{site.data.data.lastupdate}}, the model predicts that US infection rate will reach its **peak on {{site.data.data.peakdate.US}}** and a total of **{{site.data.data.infections.US}} people will have been infected** .
 
 # UK infection extrapolation from a model
 
