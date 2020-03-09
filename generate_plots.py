@@ -284,9 +284,9 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
     p.add_layout(legend, "above")
 
     label_opts = dict(
-        x=dates[-1],
+        x=[dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
         y=5,
-        text_align="left",
+        text_align="right",
         text_font_size="9pt",
     )
 
