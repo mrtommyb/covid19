@@ -12,7 +12,7 @@ from bokeh.io import curdoc
 from bokeh.embed import components
 from bokeh import plotting
 from bokeh.models import Legend, ColumnDataSource
-from bokeh.models import FuncTickFormatter, Label
+from bokeh.models import FuncTickFormatter, Label, Range1d
 from scipy.optimize import curve_fit
 
 import pymc3 as pm
@@ -145,7 +145,7 @@ def logistic_model(x, la, lb, lc):
 
 
 def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
-    dates = by_country.index
+    dates = df.index
     y = df.loc[:, country].values
     x = (dates - np.datetime64(dates[0])).days
 
@@ -205,25 +205,136 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
         np.exp(x0[2]),
     ]
 
-def run_mcmc(df, country='US', days_in_future=100, logy=True):
-    pass
+
+def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
+    dates = df.index
+    y = by_country.loc[:, country].values
+    x = (dates - np.datetime64(dates[0])).days
+    xplot = np.arange(x[-1] + days_in_future)
+
+    p0 = np.log([2.3, 46, 2000])
+    x0, cov = curve_fit(logistic_model, x, y, p0=p0, maxfev=10000)
+
+    with pm.Model() as model:
+
+        def logistic_cdf(x, la, lb, lc):
+            a, b, c = tt.exp(la), tt.exp(lb), tt.exp(lc)
+            return c / (1 + tt.exp(-(x - b) / a))
+
+        loga = pm.Normal("loga", mu=tt.log(x0[0]), sd=2)
+        logb = pm.Normal("logb", mu=tt.log(x0[1]), sd=5)
+
+        popBound = pm.Bound(
+            pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
+        )
+        logc = popBound("logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25)
+        logsd = pm.Normal("logsd", mu=2, sd=2)
+
+        mod = logistic_cdf(x.values, loga, logb, logc)
+
+        pm.Normal("obs", mu=mod, sd=tt.exp(logsd), observed=y)
+
+        mod_eval = pm.Deterministic(
+            "mod_eval", logistic_cdf(xplot, loga, logb, logc)
+        )
+
+        map_params = optimize()
+
+        trace = pm.sample(
+            draws=1000, tune=3000, chains=4, cores=2, start=map_params
+        )
+
+    q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
+
+    if logy:
+        p = plotting.figure(y_axis_type="log", x_axis_type="datetime")
+        p.yaxis.formatter = FuncTickFormatter(code=code)
+    else:
+        p = plotting.figure(y_axis_type="linear", x_axis_type="datetime")
+
+    # ln = p.line(
+    #     [dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
+    #     q[0],
+    #     line_width=2,
+    # )
+    ln = p.line([dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
+                np.mean(trace["mod_eval"], axis=0), line_width=2)
+    p.line(
+        [dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
+        q[1],
+        line_dash="dashed",
+        line_width=1,
+    )
+    p.line(
+        [dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
+        q[2],
+        line_dash="dashed",
+        line_width=1,
+    )
+    p.circle(dates, y, color=colors[1])
+    p.y_range=Range1d(1, 1.5*np.max(q[1]))
+    p.yaxis.formatter = FuncTickFormatter(code=code)
+
+    legend_it = [(country, [ln])]
+    legend = Legend(
+        items=legend_it, location="top_right", orientation="horizontal"
+    )
+    legend.spacing = 17
+    legend.click_policy = "hide"
+    p.add_layout(legend, "above")
+
+    label_opts = dict(
+        x=dates[-1],
+        y=5,
+        text_align="right",
+        text_font_size="9pt",
+    )
+
+    caption = Label(
+        text=f'Created by mrtommyb on {datetime.datetime.now().strftime("%b %d, %Y")}',
+        **label_opts,
+    )
+
+    p.add_layout(caption, "below")
+
+    script, div = components(p)
+    embedfile = f"_includes/{country.replace(' ', '')}_infections_mcmc_embed.html"
+    with open(embedfile, "w") as ff:
+        ff.write(div)
+        ff.write(script)
 
 
-def create_yaml(d):
+    return [
+        f'{(dates[0] + datetime.timedelta(days=np.mean(np.exp(trace["logb"])))).strftime("%b %d, %Y")}',
+        [np.mean(np.exp(trace['logc'])), *np.percentile(np.exp(trace['logc']), [90,10])],
+    ]
+
+
+def create_yaml(d, mcmc=False):
     yamlfile = "_data/data.yaml"
     with open(yamlfile, "w") as ff:
-        ff.write(f'lastupdate: {datetime.datetime.now().strftime("%b %d, %Y")}\n')
-        ff.write('\n')
+        ff.write(
+            f'lastupdate: {datetime.datetime.now().strftime("%b %d, %Y")}\n'
+        )
+        ff.write("\n")
         ff.write("infections:\n")
         for k, v in d.items():
-            if v[1] > 1000:
-                ff.write(f"        {k}: {v[1] / 1000:.1f} million\n")
+            if mcmc:
+                if v[1][0] > 1000:
+                    ff.write(f"        {k}: {v[1][0] / 1000:.1f} million [{v[1][2] / 1000:.1f} - {v[1][1] / 1000:.1f}]\n")
+                else:
+                    ff.write(f"        {k}: {v[1][0]:.1f} thousand [{v[1][2]:.1f} - {v[1][1]:.1f}]\n")
             else:
-                ff.write(f"        {k}: {v[1]:.1f} thousand\n")
-        ff.write('\n')
+                if v[1] > 1000:
+                    ff.write(f"        {k}: {v[1] / 1000:.1f} million\n")
+                else:
+                    ff.write(f"        {k}: {v[1]:.1f} thousand\n")
+
+        ff.write("\n")
         ff.write("peakdate:\n")
         for k, v in d.items():
             ff.write(f"        {k}: {v[0]}\n")
+
 
 if __name__ == "__main__":
     by_country = get_data()
@@ -240,6 +351,20 @@ if __name__ == "__main__":
         "UK",
     ]:
         a, b = extrapolate_logistic(by_country, country)
-        d[country.replace(" ", "")] = [a, b/1000]
-
+        d[country.replace(" ", "")] = [a, b / 1000]
     create_yaml(d)
+
+    d = {}
+    pops = [1.3E9, 7.5E9-1.3E9, 51.5E6, 60E6, 327E6, 66E6]
+    for i, country in enumerate([
+        "Mainland China",
+        "Outside China",
+        "South Korea",
+        "Italy",
+        "US",
+        "UK",
+    ]):
+        a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
+        d[country.replace(" ", "")] = [a, np.array(b) / 1000]
+
+        create_yaml(d, mcmc=True)
