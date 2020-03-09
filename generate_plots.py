@@ -146,8 +146,8 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=False):
     x = (dates - np.datetime64(dates[0])).days
 
     p0 = np.log([2.3, 46, 2000])
-    x0, _ = curve_fit(logistic_model, x, y, p0=p0, maxfev=10000)
-
+    x0, cov = curve_fit(logistic_model, x, y, p0=p0, maxfev=10000)
+    sds = np.sqrt(np.diag(cov))
     dts = np.arange(len(dates) + days_in_future)
 
     if logy:
