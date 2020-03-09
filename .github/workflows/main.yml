@@ -41,5 +41,5 @@ jobs:
     # from https://github.com/marketplace/actions/git-auto-commit
     - uses: stefanzweifel/git-auto-commit-action@v4.1.0
       with:
-        commit_message: Rerun with updated planet lists
+        commit_message: Regular update with new infections
         branch: master
