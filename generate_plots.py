@@ -210,9 +210,9 @@ def create_yaml(d):
         ff.write("infections:\n")
         for k, v in d.items():
             if v[1] > 1000:
-                ff.write(f"        {k}: {v[1] / 1000} million\n")
+                ff.write(f"        {k}: {v[1] / 1000:.1f} million\n")
             else:
-                ff.write(f"        {k}: {v[1]} thousand\n")
+                ff.write(f"        {k}: {v[1]:.1f} thousand\n")
         ff.write('\n')
         ff.write("peakdate:\n")
         for k, v in d.items():
@@ -233,6 +233,6 @@ if __name__ == "__main__":
         "UK",
     ]:
         a, b = extrapolate_logistic(by_country, country)
-        d[country.replace(" ", "")] = [a, int(b/1000)]
+        d[country.replace(" ", "")] = [a, b/1000]
 
     create_yaml(d)
