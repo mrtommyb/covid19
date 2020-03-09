@@ -227,7 +227,9 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
         popBound = pm.Bound(
             pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
         )
-        logc = popBound("logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25)
+        logc = popBound(
+            "logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25
+        )
         logsd = pm.Normal("logsd", mu=2, sd=2)
 
         mod = logistic_cdf(x.values, loga, logb, logc)
@@ -257,8 +259,11 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
     #     q[0],
     #     line_width=2,
     # )
-    ln = p.line([dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
-                np.mean(trace["mod_eval"], axis=0), line_width=2)
+    ln = p.line(
+        [dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
+        np.mean(trace["mod_eval"], axis=0),
+        line_width=2,
+    )
     p.line(
         [dates[0] + datetime.timedelta(days=x) for x in range(0, xplot[-1])],
         q[1],
@@ -272,7 +277,7 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
         line_width=1,
     )
     p.circle(dates, y, color=colors[1])
-    p.y_range=Range1d(1, 1.5*np.max(q[1]))
+    p.y_range = Range1d(1, 1.5 * np.max(q[1]))
     p.yaxis.formatter = FuncTickFormatter(code=code)
 
     legend_it = [(country, [ln])]
@@ -298,15 +303,19 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
     p.add_layout(caption, "below")
 
     script, div = components(p)
-    embedfile = f"_includes/{country.replace(' ', '')}_infections_mcmc_embed.html"
+    embedfile = (
+        f"_includes/{country.replace(' ', '')}_infections_mcmc_embed.html"
+    )
     with open(embedfile, "w") as ff:
         ff.write(div)
         ff.write(script)
 
-
     return [
         f'{(dates[0] + datetime.timedelta(days=np.mean(np.exp(trace["logb"])))).strftime("%b %d, %Y")}',
-        [np.mean(np.exp(trace['logc'])), *np.percentile(np.exp(trace['logc']), [90,10])],
+        [
+            np.mean(np.exp(trace["logc"])),
+            *np.percentile(np.exp(trace["logc"]), [90, 10]),
+        ],
     ]
 
 
@@ -321,9 +330,13 @@ def create_yaml(d, mcmc=False):
         for k, v in d.items():
             if mcmc:
                 if v[1][0] > 1000:
-                    ff.write(f"        {k}: {v[1][0] / 1000:.1f} million [{v[1][2] / 1000:.1f} - {v[1][1] / 1000:.1f}]\n")
+                    ff.write(
+                        f"        {k}: {v[1][0] / 1000:.1f} million [{v[1][2] / 1000:.1f} - {v[1][1] / 1000:.1f}]\n"
+                    )
                 else:
-                    ff.write(f"        {k}: {v[1][0]:.1f} thousand [{v[1][2]:.1f} - {v[1][1]:.1f}]\n")
+                    ff.write(
+                        f"        {k}: {v[1][0]:.1f} thousand [{v[1][2]:.1f} - {v[1][1]:.1f}]\n"
+                    )
             else:
                 if v[1] > 1000:
                     ff.write(f"        {k}: {v[1] / 1000:.1f} million\n")
@@ -339,7 +352,17 @@ def create_yaml(d, mcmc=False):
 if __name__ == "__main__":
     by_country = get_data()
 
-    make_contries_curves(by_country)
+    make_contries_curves(
+        by_country,
+        counties=[
+            "Mainland China",
+            "Outside China",
+            "South Korea",
+            "Italy",
+            "US",
+            "UK",
+        ],
+    )
 
     d = {}
     for country in [
@@ -355,15 +378,10 @@ if __name__ == "__main__":
     create_yaml(d)
 
     d = {}
-    pops = [1.3E9, 7.5E9-1.3E9, 51.5E6, 60E6, 327E6, 66E6]
-    for i, country in enumerate([
-        "Mainland China",
-        "Outside China",
-        "South Korea",
-        "Italy",
-        "US",
-        "UK",
-    ]):
+    pops = [1.3e9, 7.5e9 - 1.3e9, 51.5e6, 60e6, 327e6, 66e6]
+    for i, country in enumerate(
+        ["Mainland China", "Outside China", "South Korea", "Italy", "US", "UK"]
+    ):
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
