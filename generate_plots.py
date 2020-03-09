@@ -243,7 +243,8 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
         map_params = optimize()
 
         trace = pm.sample(
-            draws=1000, tune=3000, chains=4, cores=2, start=map_params
+            draws=1000, tune=3000, chains=4, cores=2, start=map_params,
+            target_accept=0.9
         )
 
     q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
@@ -289,7 +290,7 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
     p.add_layout(legend, "above")
 
     label_opts = dict(
-        x=dates[0] + datetime.timedelta(days=xplot[-1]),
+        x=dates[0] + datetime.timedelta(days=int(xplot[-1])),
         y=5,
         text_align="right",
         text_font_size="9pt",
