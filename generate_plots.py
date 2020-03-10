@@ -334,13 +334,13 @@ def create_yaml(d, mcmc=False):
         ff.write("infections:\n")
         for k, v in d.items():
             if mcmc:
-                if v[1][0] > 1000:
+                if v[1][0] > 100000:
                     ff.write(
-                        f"        {k}: {v[1][0] / 1000:.1f} [{v[1][2] / 1000:.2f} - {v[1][1] / 1000:.2f}] million\n"
+                        f"        {k}: {v[1][0] / 1000:.2f} [{v[1][2] / 1000:.2f} - {v[1][1] / 1000:.2f}] million\n"
                     )
                 else:
                     ff.write(
-                        f"        {k}: {v[1][0]:.1f} [{v[1][2]:.2f} - {v[1][1]:.2f}] thousand\n"
+                        f"        {k}: {v[1][0]:.2f} [{v[1][2]:.2f} - {v[1][1]:.2f}] thousand\n"
                     )
             else:
                 if v[1] > 1000:
