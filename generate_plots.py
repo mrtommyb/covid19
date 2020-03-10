@@ -126,7 +126,7 @@ def make_contries_curves(
     )
 
     caption = Label(
-        text=f'Created by mrtommyb on {datetime.datetime.now().strftime("%b %d, %Y")}',
+        text=f'Created by Tom Barclay on {datetime.datetime.now().strftime("%b %d, %Y")}',
         **label_opts,
     )
 
@@ -188,7 +188,7 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
     )
 
     caption = Label(
-        text=f'Created by mrtommyb on {datetime.datetime.now().strftime("%b %d, %Y")}',
+        text=f'Created by Tom Barclay on {datetime.datetime.now().strftime("%b %d, %Y")}',
         **label_opts,
     )
 
@@ -282,7 +282,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
         line_width=1,
     )
     p.circle(dates, y, color=colors[1])
-    p.y_range = Range1d(10, 1.5 * np.max(q[1]))
+    p.y_range = Range1d(10, 1.2 * np.max(q[1]))
     p.yaxis.formatter = FuncTickFormatter(code=code)
 
     legend_it = [(country, [ln])]
@@ -295,13 +295,13 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
 
     label_opts = dict(
         x=dates[0] + datetime.timedelta(days=int(xplot[-1])),
-        y=12,
+        y=np.max(q[1])*1.1,
         text_align="right",
         text_font_size="9pt",
     )
 
     caption = Label(
-        text=f'Created by mrtommyb on {datetime.datetime.now().strftime("%b %d, %Y")}',
+        text=f'Created by Tom Barclay on {datetime.datetime.now().strftime("%b %d, %Y")}',
         **label_opts,
     )
 
