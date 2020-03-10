@@ -4,7 +4,7 @@ attrs:
         # border_fill_color: "#2F2F2F"
         outline_line_color: "black"
         outline_line_width: 1
-        plot_width: 750
+        plot_width: 600
         plot_height: 400
     Grid:
         grid_line_width: 1
@@ -24,4 +24,4 @@ attrs:
         major_tick_out: 10
         minor_tick_out: 7
     Legend:
-        label_text_font_size: "12pt"
+        label_text_font_size: "9pt"

@@ -206,7 +206,7 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
     ]
 
 
-def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
+def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
     dates = df.index
     y = by_country.loc[:, country].values
     x = (dates - np.datetime64(dates[0])).days
@@ -278,7 +278,7 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
         line_width=1,
     )
     p.circle(dates, y, color=colors[1])
-    p.y_range = Range1d(1, 1.5 * np.max(q[1]))
+    p.y_range = Range1d(10, 1.5 * np.max(q[1]))
     p.yaxis.formatter = FuncTickFormatter(code=code)
 
     legend_it = [(country, [ln])]
@@ -291,7 +291,7 @@ def run_mcmc(df, country="US", days_in_future=100, logy=True, totalPop=7e9):
 
     label_opts = dict(
         x=dates[0] + datetime.timedelta(days=int(xplot[-1])),
-        y=5,
+        y=12,
         text_align="right",
         text_font_size="9pt",
     )
@@ -386,4 +386,4 @@ if __name__ == "__main__":
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
-    create_yaml(d, mcmc=True)
+        create_yaml(d, mcmc=True)
