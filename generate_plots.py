@@ -249,6 +249,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
             cores=2,
             start=map_params,
             target_accept=0.9,
+            progressbar = False
         )
 
     q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
@@ -334,9 +335,9 @@ def create_yaml(d, mcmc=False):
         ff.write("infections:\n")
         for k, v in d.items():
             if mcmc:
-                if v[1][0] > 100000:
+                if v[1][0] > 10000:
                     ff.write(
-                        f"        {k}: {v[1][0] / 1000:.2f} [{v[1][2] / 1000:.2f} - {v[1][1] / 1000:.2f}] million\n"
+                        f"        {k}: {v[1][0] / 1000:.2f} [{v[1][2] / 1000:.3f} - {v[1][1] / 1000:.2f}] million\n"
                     )
                 else:
                     ff.write(
