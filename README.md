@@ -16,4 +16,4 @@ The data all comes from the JHU CSSE [Github repo](https://github.com/CSSEGISand
 
 I also stole a bunch of the code from [Ethan Kruse's Github repo](https://github.com/ethankruse/exoplots), which is a fork of one from [Elisa Quintana](https://github.com/elisaquintana/exoplots), where he worked out how to make Bokeh and Github Pages play nicely together.
 
-The site is built with Github Pages, Bokeh, PyMC3, and other code.
+The site is built with [Github Pages](https://pages.github.com/), [Bokeh](https://docs.bokeh.org/en/latest/), [PyMC3](https://docs.pymc.io/), and love.
