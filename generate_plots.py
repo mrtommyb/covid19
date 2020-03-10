@@ -243,8 +243,12 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
         map_params = optimize()
 
         trace = pm.sample(
-            draws=1000, tune=3000, chains=4, cores=2, start=map_params,
-            target_accept=0.9
+            draws=1000,
+            tune=3000,
+            chains=4,
+            cores=2,
+            start=map_params,
+            target_accept=0.9,
         )
 
     q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
@@ -332,11 +336,11 @@ def create_yaml(d, mcmc=False):
             if mcmc:
                 if v[1][0] > 1000:
                     ff.write(
-                        f"        {k}: {v[1][0] / 1000:.1f} million [{v[1][2] / 1000:.1f} - {v[1][1] / 1000:.1f}]\n"
+                        f"        {k}: {v[1][0] / 1000:.1f} [{v[1][2] / 1000:.2f} - {v[1][1] / 1000:.2f}] million\n"
                     )
                 else:
                     ff.write(
-                        f"        {k}: {v[1][0]:.1f} thousand [{v[1][2]:.1f} - {v[1][1]:.1f}]\n"
+                        f"        {k}: {v[1][0]:.1f} [{v[1][2]:.2f} - {v[1][1]:.2f}] thousand\n"
                     )
             else:
                 if v[1] > 1000:
