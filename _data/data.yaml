@@ -1,7 +1,17 @@
-lastupdate: Mar 09, 2020
+lastupdate: Mar 10, 2020
 
 infections:
-        MainlandChina: 81.2 [80.82 - 81.76] thousand
+        MainlandChina: 81.24 [80.82 - 81.79] thousand
+        OutsideChina: 85.81 [77.64 - 94.81] thousand
+        SouthKorea: 7.96 [7.88 - 8.04] thousand
+        Italy: 46.57 [33.75 - 61.22] thousand
+        US: 22960.10 [11.17 - 77099.54] thousand
+        UK: 0.90 [0.61 - 1.24] thousand
 
 peakdate:
         MainlandChina: Feb 08, 2020
+        OutsideChina: Mar 11, 2020
+        SouthKorea: Mar 01, 2020
+        Italy: Mar 14, 2020
+        US: Apr 06, 2020
+        UK: Mar 10, 2020
