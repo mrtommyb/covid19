@@ -230,8 +230,12 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
         logc = popBound(
             "logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25
         )
+
+        # switching to an InvGamma prior on sd, cos its the conjugate 
+        # prior of the normal distrbution with unknown sd
+        
         # logsd = pm.Normal("logsd", mu=2, sd=2)
-        logsd = pm.InverseGamma(
+        sd = pm.InverseGamma(
             "logsd",
             mu=np.std(y[x > 0] / x[x > 0]),
             sd=np.std(y[x > 0] / x[x > 0]) / len(x[x > 0]),
@@ -239,7 +243,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
 
         mod = logistic_cdf(x.values, loga, logb, logc)
 
-        pm.Normal("obs", mu=mod, sd=logsd, observed=y)
+        pm.Normal("obs", mu=mod, sd=sd, observed=y)
 
         mod_eval = pm.Deterministic(
             "mod_eval", logistic_cdf(xplot, loga, logb, logc)
