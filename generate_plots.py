@@ -115,7 +115,7 @@ def get_data(dataset="confirmed"):
     dates = pd.to_datetime(dates)
     by_country.columns = dates
     bc = by_country.transpose()
-    bc.rename(
+    bc = bc.rename(
         columns={
             "Iran (Islamic Republic of)": "Iran",
             "Republic of Korea": "South Korea",
