@@ -406,6 +406,9 @@ if __name__ == "__main__":
     )
     do_these_countries.remove("Others")
 
+    do_these = ['Iran', 'Italy', 'Japan', 'Mainland China',
+           'South Korea',
+           'UK', 'US',]
     make_contries_curves(by_country, counties=do_these_countries)
 
     d = {}
