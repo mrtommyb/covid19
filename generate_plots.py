@@ -396,7 +396,7 @@ if __name__ == "__main__":
     126.8E6, 17.18E6, 46.66E6, 8.57E6]
     for i, country in enumerate(
         ["Mainland China", "Outside China", "South Korea", "Italy", "US",
-        "UK", "France", "Germany", #"Iran", 
+        "UK", "France", "Germany", "Iran", 
         "Japan", "Netherlands" "Spain", "Switzerland"]
     ):
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
