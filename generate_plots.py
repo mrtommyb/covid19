@@ -244,17 +244,21 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
     with pm.Model() as model:
 
         def logistic_cdf(x, la, lb, lc):
-            a, b, c = tt.exp(la), tt.exp(lb), tt.exp(lc)
+            a, b, c = la, tt.exp(lb), tt.exp(lc)
             return c / (1 + tt.exp(-(x - b) / a))
 
-        loga = pm.Normal("loga", mu=tt.log(x0[0]), sd=2)
-        logb = pm.Normal("logb", mu=tt.log(x0[1]), sd=5)
+        # growthBound = pm.Bound(pm.Normal, lower=0)
+        # loga = growthBound("loga", mu=tt.log(5), sd=3)
+        growthBound = pm.Bound(pm.Gamma, lower=1)
+        loga = growthBound('loga', alpha=5, beta=1)
+
+        logb = pm.Normal("logb", mu=tt.log(60), sd=3)
 
         popBound = pm.Bound(
             pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
         )
         logc = popBound(
-            "logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25
+            "logc", mu=np.log(0.01 * totalPop), sd=7
         )
 
         # switching to an InvGamma prior on sd, cos its the conjugate
@@ -279,8 +283,8 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
 
         trace = pm.sample(
             draws=1000,
-            tune=3000,
-            chains=4,
+            tune=5000,
+            chains=2,
             cores=2,
             start=map_params,
             target_accept=0.9,
@@ -372,7 +376,7 @@ def create_yaml(d, mcmc=False):
             if mcmc:
                 if v[1][0] > 10000:
                     ff.write(
-                        f"        {k}: {v[1][0] / 1000:.2f} [{v[1][2] / 1000:.3f} - {v[1][1] / 1000:.2f}] million\n"
+                        f"        {k}: {v[1][0] / 1000:.2f} [{v[1][2] / 1000:.2f} - {v[1][1] / 1000:.2f}] million\n"
                     )
                 else:
                     ff.write(
@@ -409,7 +413,7 @@ if __name__ == "__main__":
     do_these = ['Iran', 'Italy', 'Japan', 'Mainland China',
            'South Korea',
            'UK', 'US',]
-    make_contries_curves(by_country, counties=do_these_countries)
+    make_contries_curves(by_country, counties=do_these)
 
     d = {}
     for country in do_these_countries:
@@ -420,7 +424,7 @@ if __name__ == "__main__":
     d = {}
     pops = [
         1.3e9,
-        7.5e9 - 1.3e9,
+        # 7.5e9 - 1.3e9,
         51.5e6,
         60e6,
         327e6,
@@ -436,7 +440,8 @@ if __name__ == "__main__":
     for i, country in enumerate(
         [
             "Mainland China",
-            "Outside China", "South Korea",
+            # "Outside China", 
+            "South Korea",
             "Italy",
             "US",
             "UK",
