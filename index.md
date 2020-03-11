@@ -5,15 +5,66 @@ This shows the number of confirmed infections reported by the Johns Hopkins Univ
 
 # Extrapolations of cumulative infections for various countries
 
-I took the observed number of confirmed COVID-19 cases created a model that uses [logistic distribution](https://en.wikipedia.org/wiki/Logistic_distribution) to predict future cases. This is a sigmoid shape and so allows for exponential growth that slowly flattens out. The data predictions come from a [Markov chain Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) analysis with priors that prevent the number of infections from being larger than the total population of the country. Also, it probably shouldn't be taken seriously by anyone.
+I took the observed number of confirmed COVID-19 cases created a model that uses [logistic function](https://en.wikipedia.org/wiki/Logistic_function) to predict future cases. This is a sigmoid shape and so allows for exponential growth that slowly flattens out. The data predictions come from a [Markov chain Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) analysis with priors that prevent the number of infections from being larger than the total population of the country. Also, it probably shouldn't be taken seriously by anyone.
 
 The figures below are auto-generated using data on the latest number of confirmed cases and extrapolate from the observations by 50 days. The peak infection rate is the last day where the number of daily cases increases and the total number of infections is over the entire epidemic. The uncertainty regions are 80% confidence intervals.
+
+## China infection extrapolation from a model
+
+{% include MainlandChina_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that China infection rate **peaks on {{site.data.data.peakdate.MainlandChina}}** and a total of **{{site.data.data.infections.MainlandChina}} people will be infected**.
+
+## Italy infection extrapolation from a model
+
+{% include Italy_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that Italy infection rate **peaks on {{site.data.data.peakdate.Italy}}** and a total of **{{site.data.data.infections.Italy}} people will be infected**.
+
+## South Korea infection extrapolation from a model
+
+{% include SouthKorea_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that South Korea infection **peaks on {{site.data.data.peakdate.SouthKorea}}** and a total of **{{site.data.data.infections.SouthKorea}} people will be infected**.
+
+
+## Iran infection extrapolation from a model
+
+{% include Iran_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that Iran infection **peaks on {{site.data.data.peakdate.Iran}}** and a total of **{{site.data.data.infections.Iran}} people will be infected**.
+
+## France infection extrapolation from a model
+
+{% include France_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that France infection **peaks on {{site.data.data.peakdate.France}}** and a total of **{{site.data.data.infections.France}} people will be infected**.
+
+## Germany infection extrapolation from a model
+
+{% include Germany_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that Germany infection **peaks on {{site.data.data.peakdate.Germany}}** and a total of **{{site.data.data.infections.Germany}} people will be infected**.
+
+
+## Spain infection extrapolation from a model
+
+{% include Spain_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that Spain infection **peaks on {{site.data.data.peakdate.Spain}}** and a total of **{{site.data.data.infections.Spain}} people will be infected**.
+
 
 ## US infection extrapolation from a model
 
 {% include US_infections_mcmc_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that US infection rate will **peak on {{site.data.data.peakdate.US}}** and a total of **{{site.data.data.infections.US}} people will have been infected** .
+As of {{site.data.data.lastupdate}}, the model predicts that US infection rate will **peak on {{site.data.data.peakdate.US}}** and a total of **{{site.data.data.infections.US}} people will have been infected**.
+
+## Japan infection extrapolation from a model
+
+{% include Japan_infections_mcmc_embed.html %}
+
+As of {{site.data.data.lastupdate}}, the model predicts that Japan infection rate will **peak on {{site.data.data.peakdate.Japan}}** and a total of **{{site.data.data.infections.Japan}} people will have been infected**.
 
 ## UK infection extrapolation from a model
 
@@ -21,11 +72,13 @@ As of {{site.data.data.lastupdate}}, the model predicts that US infection rate w
 
 As of {{site.data.data.lastupdate}}, the model predicts that UK infection rate will reach its **peak on {{site.data.data.peakdate.UK}}** and a total of **{{site.data.data.infections.UK}} people will be infected**.
 
-## China infection extrapolation from a model
+## Netherlands infection extrapolation from a model
 
-{% include MainlandChina_infections_mcmc_embed.html %}
+{% include Netherlands_infections_mcmc_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that China infection rate reached its **peak on {{site.data.data.peakdate.MainlandChina}}** and a total of **{{site.data.data.infections.MainlandChina}} people will be infected**.
+As of {{site.data.data.lastupdate}}, the model predicts that Netherlands infection rate will reach its **peak on {{site.data.data.peakdate.Netherlands}}** and a total of **{{site.data.data.infections.Netherlands}} people will be infected**.
+
+
 
 
 <!-- # Outside China infection extrapolation from a model
@@ -34,17 +87,9 @@ As of {{site.data.data.lastupdate}}, the model predicts that China infection rat
 
 As of {{site.data.data.lastupdate}}, the model predicts that for all counties other than China the infection rate will reach its peak on {{site.data.data.peakdate.OutsideChina}} and **{{site.data.data.infections.OutsideChina}} people will be infected**. -->
 
-## South Korea infection extrapolation from a model
 
-{% include SouthKorea_infections_mcmc_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that South Korea infection rate will reach its **peak on {{site.data.data.peakdate.SouthKorea}}** and a total of **{{site.data.data.infections.SouthKorea}} people will be infected**.
 
-## Italy infection extrapolation from a model
-
-{% include Italy_infections_mcmc_embed.html %}
-
-As of {{site.data.data.lastupdate}}, the model predicts that Italy infection rate will reach its **peak on {{site.data.data.peakdate.Italy}}** and a total of **{{site.data.data.infections.Italy}} people will be infected**.
 
 
 # Thanks (i.e. who I took ideas and code from)

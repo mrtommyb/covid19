@@ -4,7 +4,7 @@ This site pulls data from the JHU CSSE [Github repo](https://github.com/CSSEGISa
 
 The idea is that I pull a latest COVID-19 confirmed cases data, plot that data, and make models of infections rates. GitHub actions autmatically runs the file generate_plots.py. 
 
-I took the observed number of confirmed COVID-19 cases created a model that uses [logistic distribution](https://en.wikipedia.org/wiki/Logistic_distribution) to predict future cases. This is a sigmoid shape and so allows for exponential growth that slowly flattens out. The data predictions come from a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) analysis with priors that prevent the number of infections from being larger than the total population of the country. Also, it probably shouldn't be taken seriously by anyone.
+I took the observed number of confirmed COVID-19 cases created a model that uses [logistic function](https://en.wikipedia.org/wiki/Logistic_function) to predict future cases. This is a sigmoid shape and so allows for exponential growth that slowly flattens out. The data predictions come from a [Hamiltonian Monte Carlo](https://en.wikipedia.org/wiki/Hamiltonian_Monte_Carlo) analysis with priors that prevent the number of infections from being larger than the total population of the country. Also, it probably shouldn't be taken seriously by anyone.
 
 The HMC model is generated using PyMC3.
 
