@@ -230,7 +230,10 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
         logc = popBound(
             "logc", mu=tt.log(tt.min([x0[2], 0.1 * totalPop])), sd=25
         )
-        logsd = pm.Normal("logsd", mu=2, sd=2)
+        # logsd = pm.Normal("logsd", mu=2, sd=2)
+        logsd = pm.InverseGamma(
+            "logsd", alpha=np.nanstd(y / x), beta=np.nanstd(y / x) / len(x)
+        )
 
         mod = logistic_cdf(x.values, loga, logb, logc)
 
@@ -249,7 +252,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
             cores=2,
             start=map_params,
             target_accept=0.9,
-            progressbar = False
+            progressbar=False,
         )
 
     q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
@@ -296,7 +299,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
 
     label_opts = dict(
         x=dates[0] + datetime.timedelta(days=int(xplot[-1])),
-        y=np.max(q[1])*1.1,
+        y=np.max(q[1]) * 1.1,
         text_align="right",
         text_font_size="9pt",
     )
