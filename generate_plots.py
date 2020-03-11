@@ -433,12 +433,12 @@ if __name__ == "__main__":
     for i, country in enumerate(
         [
             "Mainland China",
-            "Outside China",  # "South Korea",
+            "Outside China", "South Korea",
             "Italy",
             "US",
             "UK",
             "France",
-            "Germany",  # "Iran",
+            "Germany", "Iran",
             "Japan",
             "Netherlands", "Spain",
             "Switzerland",
