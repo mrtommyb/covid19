@@ -61,10 +61,26 @@ deaths_url = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/c
 #     "#aaaaaa",
 #     "#66ccee",
 # ]
-colors = ["#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", 
-"#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", 
-"#e74c3c", "#95a5a6", "#f39c12", 
-"#d35400", "#c0392b", "#7f8c8d", ]
+colors = [
+    "#1abc9c",
+    "#c0392b",
+    "#2ecc71",
+    "#3498db",
+    "#9b59b6",
+    "#34495e",
+    "#16a085",
+    "#27ae60",
+    "#2980b9",
+    "#8e44ad",
+    "#2c3e50",
+    "#f1c40f",
+    "#e67e22",
+    "#e74c3c",
+    "#95a5a6",
+    "#f39c12",
+    "#d35400",
+    "#7f8c8d",
+]
 markers = ["circle", "square", "triangle", "diamond", "inverted_triangle"]
 
 
@@ -99,7 +115,12 @@ def get_data(dataset="confirmed"):
     dates = pd.to_datetime(dates)
     by_country.columns = dates
     bc = by_country.transpose()
-    bc.rename(columns={"Iran (Islamic Republic of)": "Iran", "Republic of Korea": "South Korea"})
+    bc.rename(
+        columns={
+            "Iran (Islamic Republic of)": "Iran",
+            "Republic of Korea": "South Korea",
+        }
+    )
     return bc
 
 
@@ -122,12 +143,12 @@ def make_contries_curves(
     legend = Legend(
         items=legend_it, location="center", orientation="horizontal"
     )
-    legend.spacing = 17
+    legend.spacing = 8
     legend.click_policy = "hide"
     p.add_layout(legend, "above")
 
     label_opts = dict(
-        x=df.index[-1], y=1, text_align="right", text_font_size="9pt"
+        x=df.index[-1], y=1, text_align="right", text_font_size="7pt"
     )
 
     caption = Label(
@@ -378,10 +399,12 @@ if __name__ == "__main__":
     #    'Netherlands', 'Others', 'South Korea', 'Spain', 'Switzerland',
     #    'UK', 'US',
 
-    do_these_countries = list(by_country.loc[
+    do_these_countries = list(
+        by_country.loc[
             :, by_country.iloc[-1] >= by_country.iloc[-1]["UK"]
-        ].columns.values)
-    do_these_countries.remove('Others')
+        ].columns.values
+    )
+    do_these_countries.remove("Others")
 
     make_contries_curves(by_country, counties=do_these_countries)
 
@@ -392,12 +415,34 @@ if __name__ == "__main__":
     create_yaml(d)
 
     d = {}
-    pops = [1.3e9, 7.5e9 - 1.3e9, 51.5e6, 60e6, 327e6, 66e6, 66.99E6, 82.79E6, 81.16E6,
-    126.8E6, 17.18E6, 46.66E6, 8.57E6]
+    pops = [
+        1.3e9,
+        7.5e9 - 1.3e9,
+        51.5e6,
+        60e6,
+        327e6,
+        66e6,
+        66.99e6,
+        82.79e6,
+        81.16e6,
+        126.8e6,
+        17.18e6,
+        46.66e6,
+        8.57e6,
+    ]
     for i, country in enumerate(
-        ["Mainland China", "Outside China", "South Korea", "Italy", "US",
-        "UK", "France", "Germany", "Iran", 
-        "Japan", "Netherlands" "Spain", "Switzerland"]
+        [
+            "Mainland China",
+            "Outside China",  # "South Korea",
+            "Italy",
+            "US",
+            "UK",
+            "France",
+            "Germany",  # "Iran",
+            "Japan",
+            "Netherlands", "Spain",
+            "Switzerland",
+        ]
     ):
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
