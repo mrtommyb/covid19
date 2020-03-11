@@ -232,12 +232,14 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
         )
         # logsd = pm.Normal("logsd", mu=2, sd=2)
         logsd = pm.InverseGamma(
-            "logsd", alpha=np.nanstd(y / x), beta=np.nanstd(y / x) / len(x)
+            "logsd",
+            mu=np.std(y[x > 0] / x[x > 0]),
+            sd=np.std(y[x > 0] / x[x > 0]) / len(x[x > 0]),
         )
 
         mod = logistic_cdf(x.values, loga, logb, logc)
 
-        pm.Normal("obs", mu=mod, sd=tt.exp(logsd), observed=y)
+        pm.Normal("obs", mu=mod, sd=logsd, observed=y)
 
         mod_eval = pm.Deterministic(
             "mod_eval", logistic_cdf(xplot, loga, logb, logc)
@@ -252,7 +254,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
             cores=2,
             start=map_params,
             target_accept=0.9,
-            progressbar=False,
+            progressbar=True,
         )
 
     q = np.percentile(trace["mod_eval"], q=[50, 90, 10], axis=0)
