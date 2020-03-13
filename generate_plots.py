@@ -109,7 +109,7 @@ def get_data(dataset="confirmed"):
     dates = by_country.columns[2:]
 
     by_country.loc["Outside China", dates] = (
-        by_country.sum().loc[dates] - by_country.loc["Mainland China", dates]
+        by_country.sum().loc[dates] - by_country.loc["China", dates]
     )
     by_country = by_country.loc[:, dates].astype(int)
     dates = pd.to_datetime(dates)
@@ -117,21 +117,21 @@ def get_data(dataset="confirmed"):
     bc = by_country.transpose()
     bc = bc.rename(
         columns={
-            "Iran (Islamic Republic of)": "Iran",
-            "Republic of Korea": "South Korea",
+            # "Iran (Islamic Republic of)": "Iran",
+            "Korea, South": "South Korea",
         }
     )
     return bc
 
 
 def make_contries_curves(
-    df, counties=["Mainland China", "Outside China", "US", "UK"]
+    df, countries=["Mainland China", "Outside China", "US", "UK"]
 ):
 
     p = plotting.figure(y_axis_type="log", x_axis_type="datetime")
-    source = ColumnDataSource(df.loc[:, counties])
+    source = ColumnDataSource(df.loc[:, countries])
     legend_it = []
-    for i, c in enumerate(counties):
+    for i, c in enumerate(countries):
 
         #     p.circle(x='index', y=c, source=source, legend=dict(value=c), color=colors[i])
         ln = p.line(
@@ -184,7 +184,7 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
         p = plotting.figure(y_axis_type="log", x_axis_type="datetime")
         p.yaxis.formatter = FuncTickFormatter(code=code)
     else:
-        p = plotting.figure(y_axis_type="linear", x_axis_type="datetime")
+        p = plotting.figure(y_axis_type="log", x_axis_type="datetime")
 
     plt_dates = [
         dates[0] + datetime.timedelta(days=x) for x in range(0, dts[-1])
@@ -405,15 +405,16 @@ if __name__ == "__main__":
 
     do_these_countries = list(
         by_country.loc[
-            :, by_country.iloc[-1] >= by_country.iloc[-1]["UK"]
+            :, by_country.iloc[-1] >= by_country.iloc[-1]["United Kingdom"]
         ].columns.values
     )
-    do_these_countries.remove("Others")
+    # do_these_countries.remove("Others")
+    do_these_countries.remove("Cruise Ship")
 
-    do_these = ['Iran', 'Italy', 'Japan', 'Mainland China',
+    do_these = ['Iran', 'Italy', 'Japan', 'China',
            'South Korea',
-           'UK', 'US',]
-    make_contries_curves(by_country, counties=do_these)
+           'United Kingdom', 'US',]
+    make_contries_curves(by_country, countries=do_these)
 
     d = {}
     for country in do_these_countries:
@@ -439,12 +440,12 @@ if __name__ == "__main__":
     ]
     for i, country in enumerate(
         [
-            "Mainland China",
+            "China",
             # "Outside China", 
             "South Korea",
             "Italy",
             "US",
-            "UK",
+            "United Kingdom",
             "France",
             "Germany", "Iran",
             "Japan",
