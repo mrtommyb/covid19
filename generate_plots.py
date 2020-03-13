@@ -232,7 +232,7 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
     ]
 
 
-def run_mcmc(df, country="US", days_in_future=50, logy=False, totalPop=7e9):
+def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
     dates = df.index
     y = by_country.loc[:, country].values
     x = (dates - np.datetime64(dates[0])).days
@@ -453,7 +453,8 @@ if __name__ == "__main__":
             "Switzerland",
         ]
     ):
-        a, b = run_mcmc(by_country, country=country, totalPop=pops[i])
+        a, b = run_mcmc(by_country, country=country, totalPop=pops[i],
+                        logy=False)
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
     create_yaml(d, mcmc=True)

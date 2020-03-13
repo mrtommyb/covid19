@@ -11,9 +11,9 @@ The figures below are auto-generated using data on the latest number of confirme
 
 ## China infection extrapolation from a model
 
-{% include MainlandChina_infections_mcmc_embed.html %}
+{% include China_infections_mcmc_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that China infection rate **peaks on {{site.data.data.peakdate.MainlandChina}}** and a total of **{{site.data.data.infections.MainlandChina}} people will be infected**.
+As of {{site.data.data.lastupdate}}, the model predicts that China infection rate **peaks on {{site.data.data.peakdate.China}}** and a total of **{{site.data.data.infections.China}} people will be infected**.
 
 ## Italy infection extrapolation from a model
 
@@ -68,9 +68,9 @@ As of {{site.data.data.lastupdate}}, the model predicts that Japan infection rat
 
 ## UK infection extrapolation from a model
 
-{% include UK_infections_mcmc_embed.html %}
+{% include UnitedKingdom_infections_mcmc_embed.html %}
 
-As of {{site.data.data.lastupdate}}, the model predicts that UK infection rate will reach its **peak on {{site.data.data.peakdate.UK}}** and a total of **{{site.data.data.infections.UK}} people will be infected**.
+As of {{site.data.data.lastupdate}}, the model predicts that UK infection rate will reach its **peak on {{site.data.data.peakdate.UnitedKingdom}}** and a total of **{{site.data.data.infections.UnitedKingdom}} people will be infected**.
 
 ## Netherlands infection extrapolation from a model
 
@@ -81,11 +81,7 @@ As of {{site.data.data.lastupdate}}, the model predicts that Netherlands infecti
 
 
 
-<!-- # Outside China infection extrapolation from a model
 
-{% include OutsideChina_infections_mcmc_embed.html %}
-
-As of {{site.data.data.lastupdate}}, the model predicts that for all counties other than China the infection rate will reach its peak on {{site.data.data.peakdate.OutsideChina}} and **{{site.data.data.infections.OutsideChina}} people will be infected**. -->
 
 
 
