@@ -397,6 +397,9 @@ def create_yaml(d, mcmc=False):
 if __name__ == "__main__":
     by_country = get_data()
 
+    # bad data on March 12
+    by_country = by_country.drop(pd.Timestamp('2020-03-12'))
+
     # let's list all countries with at least as many cases than uk
     # as of writing these are
     # 'France', 'Germany', 'Iran', 'Italy', 'Japan', 'Mainland China',
@@ -409,7 +412,7 @@ if __name__ == "__main__":
         ].columns.values
     )
     # do_these_countries.remove("Others")
-    do_these_countries.remove("Cruise Ship")
+    # do_these_countries.remove("Cruise Ship")
 
     do_these = ['Iran', 'Italy', 'Japan', 'China',
            'South Korea',
@@ -454,7 +457,7 @@ if __name__ == "__main__":
         ]
     ):
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i],
-                        logy=False)
+                        logy=True)
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
     create_yaml(d, mcmc=True)
