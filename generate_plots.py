@@ -250,7 +250,7 @@ def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
         # growthBound = pm.Bound(pm.Normal, lower=0)
         # loga = growthBound("loga", mu=tt.log(5), sd=3)
         growthBound = pm.Bound(pm.Gamma, lower=1)
-        loga = growthBound('loga', alpha=3.5, beta=1)
+        a = growthBound('loga', alpha=3.5, beta=1)
 
         logb = pm.Normal("logb", mu=tt.log(150), sd=3)
 
@@ -265,18 +265,19 @@ def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
         # prior of the normal distrbution with unknown sd
 
         # logsd = pm.Normal("logsd", mu=2, sd=2)
+        mask = y > 50
         sd = pm.InverseGamma(
             "logsd",
-            mu=np.std(y[x > 0] / x[x > 0]),
-            sd=np.std(y[x > 0] / x[x > 0]) / len(x[x > 0]),
+            mu=np.std(y[mask] / x[mask]),
+            sd=np.std(y[mask] / x[mask]) / len(x[mask]),
         )
 
-        mod = logistic_cdf(x.values, loga, logb, logc)
+        mod = logistic_cdf(x.values[mask], a, logb, logc)
 
-        pm.Normal("obs", mu=mod, sd=sd, observed=y)
+        pm.Normal("obs", mu=mod, sd=sd, observed=y[mask])
 
         mod_eval = pm.Deterministic(
-            "mod_eval", logistic_cdf(xplot, loga, logb, logc)
+            "mod_eval", logistic_cdf(xplot, a, logb, logc)
         )
 
         map_params = optimize()
