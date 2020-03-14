@@ -250,9 +250,9 @@ def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
         # growthBound = pm.Bound(pm.Normal, lower=0)
         # loga = growthBound("loga", mu=tt.log(5), sd=3)
         growthBound = pm.Bound(pm.Gamma, lower=1)
-        loga = growthBound('loga', alpha=5, beta=1)
+        loga = growthBound('loga', alpha=3.5, beta=1)
 
-        logb = pm.Normal("logb", mu=tt.log(60), sd=3)
+        logb = pm.Normal("logb", mu=tt.log(150), sd=3)
 
         popBound = pm.Bound(
             pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
@@ -457,7 +457,7 @@ if __name__ == "__main__":
         ]
     ):
         a, b = run_mcmc(by_country, country=country, totalPop=pops[i],
-                        logy=False)
+                        logy=True)
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
     create_yaml(d, mcmc=True)
