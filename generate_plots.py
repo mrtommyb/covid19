@@ -476,8 +476,8 @@ if __name__ == "__main__":
             country=country,
             totalPop=pops[i],
             logy=True,
-            tune=5000,
-            draws=1200,
+            tune=50000,
+            draws=900,
         )
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
