@@ -265,7 +265,7 @@ def run_mcmc(
         popBound = pm.Bound(
             pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
         )
-        logc = popBound("logc", mu=np.log(0.1 * totalPop), sd=7)
+        logc = popBound("logc", mu=np.log(0.1 * totalPop), sd=5)
 
         # switching to an InvGamma prior on sd, cos its the conjugate
         # prior of the normal distrbution with unknown sd
