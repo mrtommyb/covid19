@@ -118,7 +118,7 @@ def get_data(dataset="confirmed"):
     bc = bc.rename(
         columns={
             # "Iran (Islamic Republic of)": "Iran",
-            "Korea, South": "South Korea",
+            "Korea, South": "South Korea"
         }
     )
     return bc
@@ -232,7 +232,15 @@ def extrapolate_logistic(df, country="US", days_in_future=100, logy=True):
     ]
 
 
-def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
+def run_mcmc(
+    df,
+    country="US",
+    days_in_future=50,
+    logy=True,
+    totalPop=7e9,
+    tune=5000,
+    draws=1200,
+):
     dates = df.index
     y = by_country.loc[:, country].values
     x = (dates - np.datetime64(dates[0])).days
@@ -250,16 +258,14 @@ def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
         # growthBound = pm.Bound(pm.Normal, lower=0)
         # loga = growthBound("loga", mu=tt.log(5), sd=3)
         growthBound = pm.Bound(pm.Gamma, lower=1)
-        a = growthBound('loga', alpha=3.5, beta=1)
+        a = growthBound("loga", alpha=3.5, beta=1)
 
         logb = pm.Normal("logb", mu=tt.log(150), sd=3)
 
         popBound = pm.Bound(
             pm.Normal, upper=tt.log(totalPop), lower=tt.log(y[-1])
         )
-        logc = popBound(
-            "logc", mu=np.log(0.01 * totalPop), sd=7
-        )
+        logc = popBound("logc", mu=np.log(0.1 * totalPop), sd=7)
 
         # switching to an InvGamma prior on sd, cos its the conjugate
         # prior of the normal distrbution with unknown sd
@@ -283,8 +289,8 @@ def run_mcmc(df, country="US", days_in_future=50, logy=True, totalPop=7e9):
         map_params = optimize()
 
         trace = pm.sample(
-            draws=1000,
-            tune=5000,
+            draws=draws,
+            tune=tune,
             chains=2,
             cores=2,
             start=map_params,
@@ -399,7 +405,7 @@ if __name__ == "__main__":
     by_country = get_data()
 
     # bad data on March 12
-    by_country = by_country.drop(pd.Timestamp('2020-03-12'))
+    by_country = by_country.drop(pd.Timestamp("2020-03-12"))
 
     # let's list all countries with at least as many cases than uk
     # as of writing these are
@@ -415,9 +421,15 @@ if __name__ == "__main__":
     # do_these_countries.remove("Others")
     # do_these_countries.remove("Cruise Ship")
 
-    do_these = ['Iran', 'Italy', 'Japan', 'China',
-           'South Korea',
-           'United Kingdom', 'US',]
+    do_these = [
+        "Iran",
+        "Italy",
+        "Japan",
+        "China",
+        "South Korea",
+        "United Kingdom",
+        "US",
+    ]
     make_contries_curves(by_country, countries=do_these)
 
     d = {}
@@ -445,20 +457,28 @@ if __name__ == "__main__":
     for i, country in enumerate(
         [
             "China",
-            # "Outside China", 
+            # "Outside China",
             "South Korea",
             "Italy",
             "US",
             "United Kingdom",
             "France",
-            "Germany", "Iran",
+            "Germany",
+            "Iran",
             "Japan",
-            "Netherlands", "Spain",
+            "Netherlands",
+            "Spain",
             "Switzerland",
         ]
     ):
-        a, b = run_mcmc(by_country, country=country, totalPop=pops[i],
-                        logy=True)
+        a, b = run_mcmc(
+            by_country,
+            country=country,
+            totalPop=pops[i],
+            logy=True,
+            tune=5000,
+            draws=1200,
+        )
         d[country.replace(" ", "")] = [a, np.array(b) / 1000]
 
     create_yaml(d, mcmc=True)
