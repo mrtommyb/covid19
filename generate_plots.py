@@ -280,7 +280,9 @@ def run_mcmc(
 
         mod = logistic_cdf(x.values[mask], a, logb, logc)
 
-        pm.Normal("obs", mu=mod, sd=sd, observed=y[mask])
+        # pm.Normal("obs", mu=mod, sd=sd, observed=y[mask])
+        # move to Negative Binomial
+        pm.obs = pm.NegativeBinomial('obs', mod, sd, observed=y[mask])
 
         mod_eval = pm.Deterministic(
             "mod_eval", logistic_cdf(xplot, a, logb, logc)
