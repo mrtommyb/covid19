@@ -2,17 +2,17 @@ lastupdate: Apr 21, 2020
 
 infections:
         China: 83.86 [83.82 - 83.92] thousand
-        SouthKorea: 10.73 [10.68 - 10.80] thousand
-        Italy: 181.31 [181.24 - 181.43] thousand
-        US: 784.50 [784.35 - 784.72] thousand
+        SouthKorea: 10.73 [10.68 - 10.81] thousand
+        Italy: 181.32 [181.24 - 181.43] thousand
+        US: 784.50 [784.35 - 784.73] thousand
         UnitedKingdom: 126.22 [125.90 - 126.69] thousand
-        France: 156.64 [156.49 - 156.85] thousand
-        Germany: 147.18 [147.08 - 147.33] thousand
-        Iran: 83.61 [83.52 - 83.75] thousand
-        Japan: 14.84 [0.18 - 49.34] million
-        Netherlands: 33.77 [33.61 - 34.01] thousand
+        France: 156.64 [156.50 - 156.86] thousand
+        Germany: 147.19 [147.08 - 147.35] thousand
+        Iran: 83.61 [83.51 - 83.76] thousand
+        Japan: 14.97 [0.17 - 50.15] million
+        Netherlands: 33.77 [33.60 - 34.00] thousand
         Spain: 200.31 [200.22 - 200.45] thousand
-        Switzerland: 28.06 [27.96 - 28.21] thousand
+        Switzerland: 28.06 [27.96 - 28.20] thousand
 
 peakdate:
         China: Feb 07, 2020
@@ -23,7 +23,7 @@ peakdate:
         France: Apr 02, 2020
         Germany: Mar 29, 2020
         Iran: Mar 25, 2020
-        Japan: Jun 30, 2020
+        Japan: Jul 01, 2020
         Netherlands: Apr 02, 2020
         Spain: Mar 29, 2020
         Switzerland: Mar 26, 2020
